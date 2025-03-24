@@ -11,22 +11,19 @@ class ShippingInfo {
     Order order                            // tight coupling to domain
     String shippingMethod
     String trackingNumber
-    String status                          // e.g., PENDING, SHIPPED, DELIVERED
-    String city
-    String country
-
+    String status
     Date shippedAt
     Date deliveredAt
+    Address destination
 
     static constraints = {
         order nullable: false, unique: true
         shippingMethod blank: false
         trackingNumber nullable: true
         status inList: ['PENDING', 'SHIPPED', 'DELIVERED'], blank: false
-        city blank: false
-        country blank: false
         shippedAt nullable: true
         deliveredAt nullable: true
+        destination nullable: false
     }
 
     static mapping = {

@@ -10,7 +10,8 @@ class Customer {
     String name
     String email
     Date dateJoined
-
+    Address billingAddress                  // tightly coupled
+    Address shippingAddress                 // tightly coupled
     CustomerPreferences preferences         // tightly coupled
     List<Order> orders                      // bidirectional dependency
 
@@ -21,6 +22,8 @@ class Customer {
         email email: true, unique: true
         dateJoined nullable: false
         preferences nullable: true
+        shippingAddress nullabe: true
+        billingAddress nullable: true
     }
 
     static mapping = {

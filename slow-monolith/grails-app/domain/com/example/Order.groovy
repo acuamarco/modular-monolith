@@ -1,13 +1,13 @@
 package com.example
 
+
 class Order {
     Customer customer                        // direct domain dependency
     Date date
     BigDecimal totalAmount
     String status
-
     ShippingInfo shippingInfo               // another domain dependency
-    CustomerPreferences preferences         // yet another dependency
+
 
     static constraints = {
         customer nullable: false
@@ -15,7 +15,6 @@ class Order {
         totalAmount nullable: false, min: 0.0
         status nullable: false, inList: ['PENDING', 'SHIPPED', 'DELIVERED']
         shippingInfo nullable: true
-        preferences nullable: true
     }
 
     static mapping = {
@@ -23,6 +22,5 @@ class Order {
         id column: 'order_id', generator: 'identity'
         customer fetch: 'join'              // eager fetch = tight coupling
         shippingInfo fetch: 'join'
-        preferences fetch: 'join'
     }
 }
