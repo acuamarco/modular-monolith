@@ -9,4 +9,9 @@ class OrderController {
         def result = orderService.getOrderDetails(orderId)
         respond result
     }
+
+    def todaysOrdersReport() {
+        def result = orderService.getTodaysOrders()
+        respond result
+    }
 }

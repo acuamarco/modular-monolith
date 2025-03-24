@@ -9,7 +9,7 @@ class UrlMappings {
         }
 
 
-        "/test/data"(controller: "testData", action: "init")
-        "/order/$orderId"(controller: "order", action: "show")
+        "/order/$orderId"(controller: "order", action: "show", method: 'GET')
+        "/order/report/today"(controller: "order", action: "todaysOrdersReport", method: 'GET')
     }
 }

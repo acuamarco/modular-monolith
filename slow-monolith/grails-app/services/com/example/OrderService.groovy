@@ -5,15 +5,24 @@ import org.springframework.stereotype.Service
 @Service
 class OrderService {
 
-    static Map<String, String> getOrderDetails(Long orderId) {
+    Map<String, String> getOrderDetails(Long orderId) {
         Order order = Order.get(orderId)
 
         if (!order) {
             throw new RuntimeException("Order not found")
         }
 
-//        // Cross-domain access: directly querying Customer domain
-//        // Cross-domain access: directly querying Address domain
+        return getOrderMap(order)
+    }
+
+    List<Map<String, String>> getTodaysOrders() {
+        def orders = Order.list() as List<Order>
+        orders.collect { order -> getOrderMap(order)}
+    }
+
+    def getOrderMap(Order order) {
+        // Cross-domain access: directly querying Customer domain
+        // Cross-domain access: directly querying Address domain
         return [
                 orderId         : order.id as String,
                 orderDate       : order.date as String,
