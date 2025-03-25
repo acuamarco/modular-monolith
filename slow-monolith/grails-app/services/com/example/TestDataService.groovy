@@ -11,8 +11,6 @@ class TestDataService {
     static final List<String> CITIES = ['Springfield', 'Shelbyville', 'Centerville']
     static final List<String> STATES = ['IL', 'CA', 'TX', 'NY']
     static final List<String> COUNTRIES = ['US', 'CA']
-    static final List<String> LANGUAGES = ['EN', 'ES', 'FR']
-    static final List<String> STATUSES = ['VIP', 'REGULAR', 'BLOCKED']
     static final List<String> ORDER_STATUSES = ['PENDING', 'SHIPPED', 'DELIVERED']
     static final List<String> SHIPPING_METHODS = ['UPS', 'FedEx', 'USPS']
 
@@ -29,13 +27,6 @@ class TestDataService {
                     dateJoined: new Date(),
                     billingAddress: billingAddress,
                     shippingAddress: shippingAddress
-            ).save(flush: true, failOnError: true)
-
-            new CustomerPreferences(
-                    customer: customer,
-                    language: randomPick(LANGUAGES),
-                    receivesPromotions: random.nextBoolean(),
-                    status: randomPick(STATUSES)
             ).save(flush: true, failOnError: true)
 
             def order = new Order(

@@ -1,11 +1,13 @@
 package com.example
 
 class Order {
-    Customer customer                        // direct domain dependency
+    // 🔥 Direct domain dependency on Customer — cross-module reference
+    Customer customer
     Date date
     BigDecimal totalAmount
     String status
-    ShippingInfo shippingInfo               // direct domain dependency
+    // 🔥 Direct domain dependency on ShippingInfo — cross-module reference
+    ShippingInfo shippingInfo
 
 
     static constraints = {
@@ -19,7 +21,8 @@ class Order {
     static mapping = {
         table 'orders'
         id column: 'order_id', generator: 'identity'
-        customer fetch: 'join'              // eager fetch = tight coupling
+        // 🔥 Eager fetches increase coupling and load entire object graphs
+        customer fetch: 'join'
         shippingInfo fetch: 'join'
     }
 }

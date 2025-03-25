@@ -1,21 +1,19 @@
 package com.example
 
-/*
-
-
-isDelivered()	Makes ShippingInfo a rich domain class, hard to reuse outside the entity context
-No DTO	        You can’t easily serialize just what you need without leaking the entity
-*/
 class ShippingInfo {
-    Order order                            // tight coupling to domain
+    // 🔥 Tight coupling to Order domain — implies shared lifecycle and deep object graph
+    Order order
+
     String shippingMethod
     String trackingNumber
     String status
     Date shippedAt
     Date deliveredAt
+    // 🔥 Coupling to another shared entity (likely reused) — Address is used across multiple domains
     Address destination
 
     static constraints = {
+        // 🔥 Implies 1:1 hard binding with Order — very inflexible
         order nullable: false, unique: true
         shippingMethod blank: false
         trackingNumber nullable: true
@@ -28,10 +26,12 @@ class ShippingInfo {
     static mapping = {
         table 'shipping_info'
         id column: 'shipping_info_id', generator: 'identity'
-        order fetch: 'join'                                 // fetch: 'join'	Introduces hidden joins, can hurt performance
+        // 🔥 Hidden join: eager load creates large object graph when fetching Order
+        order fetch: 'join'
     }
 
     def isDelivered() {
+        // 🔥 Domain logic embedded in entity — small now, but this can sprawl
         return status == 'DELIVERED' && deliveredAt != null
     }
 }

@@ -4,30 +4,39 @@ class Customer {
     String name
     String email
     Date dateJoined
-    Address billingAddress                  // tightly coupled
-    Address shippingAddress                 // tightly coupled
-    CustomerPreferences preferences
-    List<Order> orders                      // bidirectional dependency, Order: Bidirectional relation leads to deep object graphs
 
+    // 🔥 Tight coupling to another domain object
+    Address billingAddress
+
+    // 🔥 Same here — likely should be value objects or owned types
+    Address shippingAddress
+
+    // 🔥 Bidirectional relationship (bad in modular monolith)
+    List<Order> orders
+
+    // 💬 Pitfall: This creates a bidirectional dependency between Customer and Order, which:
+    // Builds tight coupling across domain modules.
+    // Creates deep object graphs.
+    // Makes serialization, lazy loading, and memory usage harder to reason about.
     static hasMany = [orders: Order]
 
     static constraints = {
         name blank: false
         email email: true, unique: true
         dateJoined nullable: false
-        preferences nullable: true
-        shippingAddress nullabe: true
+        shippingAddress nullable: true
         billingAddress nullable: true
     }
 
     static mapping = {
         table 'customers'
         id column: 'customer_id', generator: 'identity'
-        orders cascade: 'all-delete-orphan'     // hasMany + cascade: Tricky during deletes, makes logic stateful
-        preferences fetch: 'join'               // fetch: 'join': Can cause performance issues and large joins
+        // 🔥 Risky — cascading deletes across modules can cause unintended data loss
+        orders cascade: 'all-delete-orphan'
     }
 
     def isVIP() {
-        return preferences?.status == 'VIP' && orders?.size() > 10 // Violates SRP (mixes entity + domain service logic), Depends on other domain objects (preferences, orders)
+        // 🔥 Violates SRP: mixes entity + domain service logic, and deep dependency on other domain concepts
+        return orders?.size() > 10
     }
 }
