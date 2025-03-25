@@ -7,9 +7,7 @@ class OrderService {
     CustomerService customerService
 
     static Map<String, String> getOrderDetails(Long orderId) {
-        // 🔥 Pitfall: Directly accesses the database from within the service layer, which can make the code harder to test and maintain.
-        // A better approach would be to use a repository or DAO (Data Access Object) to handle database operations.
-        // This would separate the concerns of data access and business logic, making the code more modular and testable.
+        // 🔥 Pitfall: Direct database access – no repository/DAO abstraction
         Order order = Order.get(orderId)
         if (!order) {
             throw new RuntimeException("Order not found")
@@ -25,7 +23,7 @@ class OrderService {
         List<Order> orders = Order.findAllByIdInList(orderIds)
         Set<Long> customerIds = orders.collect { it.customer?.id }.findAll().toSet()
 
-        // 🔥 Pitfall: Cross-domain service call inside domain logic creates tight coupling between domains
+        // 🔥 Pitfall: Tight coupling across domains – service-to-service communication
         List<Customer> customers = customerService.getCustomersByIds(customerIds as List)
         Map<Long, Customer> customerMap = customers.collectEntries { [(it.id): it] }
 
@@ -42,7 +40,8 @@ class OrderService {
                 status          : order.status,
                 customerName    : customer.name,
                 customerEmail   : customer.email,
-                shippingCity    : order.shippingInfo.destination.city,          // Cross-domain access: directly querying ShippingInfo domain
+                // 🔥 Pitfall: Cross-domain data access – `OrderService` reaches deep into ShippingInfo
+                shippingCity    : order.shippingInfo.destination.city,
                 shippingZipCode : order.shippingInfo.destination.postalCode
         ]
     }
