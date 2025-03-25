@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service
 class OrderService {
     CustomerService customerService
 
-    static Map<String, String> getOrderDetails(Long orderId) {
+    Map<String, String> getOrderDetails(Long orderId) {
         // 🔥 Pitfall: Direct database access – no repository/DAO abstraction
         Order order = Order.get(orderId)
         if (!order) {
@@ -33,7 +33,7 @@ class OrderService {
         }
     }
 
-    static def getOrderMap(Order order, Customer customer) {
+    def getOrderMap(Order order, Customer customer) {
         return [
                 orderId         : order.id as String,
                 orderDate       : order.date as String,
