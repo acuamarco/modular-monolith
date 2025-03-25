@@ -10,7 +10,7 @@ class OrderServiceSpec extends Specification implements ServiceUnitTest<OrderSer
         service.customerService = Mock(CustomerService)
     }
 
-    void "test getOrderDetails returns mapped order info"() {
+    void "test getOrder returns order info"() {
         given:
         def customer = new Customer(name: "John", email: "john@example.com")
         customer.id = 1L
@@ -29,12 +29,11 @@ class OrderServiceSpec extends Specification implements ServiceUnitTest<OrderSer
         Order.get(101L) >> order
 
         when:
-        def result = service.getOrderDetails(101L)
+        Order result = service.getOrder(101L)
 
         then:
-        result.orderId == "101"
-        result.customerName == "John"
-        result.shippingCity == "San Jose"
+        result.id == 101
+        result.customer.name == "John"
     }
 
     void "test getOrderReport returns report for multiple orders"() {

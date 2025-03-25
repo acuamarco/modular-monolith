@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service
 class OrderService {
     CustomerService customerService
 
-    Order getOrderDetails(Long orderId) {
+    Order getOrder(Long orderId) {
         // 🔥 Pitfall: Direct database access – no repository/DAO abstraction
         Order order = Order.get(orderId)
         if (!order) {

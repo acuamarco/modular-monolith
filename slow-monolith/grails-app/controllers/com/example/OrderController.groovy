@@ -6,7 +6,7 @@ class OrderController {
     OrderService orderService
 
     def show(Long orderId) {
-        def result = orderService.getOrderDetails(orderId)
+        def result = orderService.getOrder(orderId)
         respond result
     }
 
