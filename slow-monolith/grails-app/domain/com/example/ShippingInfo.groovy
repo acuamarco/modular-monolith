@@ -1,9 +1,8 @@
 package com.example
 
 /*
-Order order	    Creates a strong dependency back to the core Order domain
-unique: true	Enforces a 1:1 relation that’s hard to change later
-fetch: 'join'	Introduces hidden joins, can hurt performance
+
+
 isDelivered()	Makes ShippingInfo a rich domain class, hard to reuse outside the entity context
 No DTO	        You can’t easily serialize just what you need without leaking the entity
 */
@@ -29,7 +28,7 @@ class ShippingInfo {
     static mapping = {
         table 'shipping_info'
         id column: 'shipping_info_id', generator: 'identity'
-        order fetch: 'join'
+        order fetch: 'join'                                 // fetch: 'join'	Introduces hidden joins, can hurt performance
     }
 
     def isDelivered() {

@@ -1,12 +1,11 @@
 package com.example
 
-
 class Order {
     Customer customer                        // direct domain dependency
     Date date
     BigDecimal totalAmount
     String status
-    ShippingInfo shippingInfo               // another domain dependency
+    ShippingInfo shippingInfo               // direct domain dependency
 
 
     static constraints = {

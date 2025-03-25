@@ -10,8 +10,8 @@ class OrderController {
         respond result
     }
 
-    def todaysOrdersReport() {
-        def result = orderService.getTodaysOrders()
+    def report() {
+        def result = orderService.getOrderReport()
         respond result
     }
 }

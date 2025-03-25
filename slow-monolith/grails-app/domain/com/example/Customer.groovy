@@ -1,19 +1,13 @@
 package com.example
-/*
-Tight Coupling Indicators
-CustomerPreferences: Cross-domain reference; prevents clean separation
-Order: Bidirectional relation leads to deep object graphs
-hasMany + cascade: Tricky during deletes, makes logic stateful
-fetch: 'join': Can cause performance issues and large joins
-*/
+
 class Customer {
     String name
     String email
     Date dateJoined
     Address billingAddress                  // tightly coupled
     Address shippingAddress                 // tightly coupled
-    CustomerPreferences preferences         // tightly coupled
-    List<Order> orders                      // bidirectional dependency
+    CustomerPreferences preferences
+    List<Order> orders                      // bidirectional dependency, Order: Bidirectional relation leads to deep object graphs
 
     static hasMany = [orders: Order]
 
@@ -29,17 +23,11 @@ class Customer {
     static mapping = {
         table 'customers'
         id column: 'customer_id', generator: 'identity'
-        orders cascade: 'all-delete-orphan'
-        preferences fetch: 'join'
+        orders cascade: 'all-delete-orphan'     // hasMany + cascade: Tricky during deletes, makes logic stateful
+        preferences fetch: 'join'               // fetch: 'join': Can cause performance issues and large joins
     }
 
-
-    /*
-    Violates SRP (mixes entity + domain service logic)
-    Depends on other domain objects (preferences, orders)
-    * */
     def isVIP() {
-        return preferences?.status == 'VIP' && orders?.size() > 10
+        return preferences?.status == 'VIP' && orders?.size() > 10 // Violates SRP (mixes entity + domain service logic), Depends on other domain objects (preferences, orders)
     }
-
 }
