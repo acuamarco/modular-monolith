@@ -7,7 +7,8 @@ class OrderService {
     CustomerService customerService
 
     static Map<String, String> getOrderDetails(Long orderId) {
-        // 🔥 Pitfall: Directly accesses the database from within the service layer, which can make the code harder to test and maintain. A better approach would be to use a repository or DAO (Data Access Object) to handle database operations.
+        // 🔥 Pitfall: Directly accesses the database from within the service layer, which can make the code harder to test and maintain.
+        // A better approach would be to use a repository or DAO (Data Access Object) to handle database operations.
         // This would separate the concerns of data access and business logic, making the code more modular and testable.
         Order order = Order.get(orderId)
         if (!order) {
@@ -24,10 +25,8 @@ class OrderService {
         List<Order> orders = Order.findAllByIdInList(orderIds)
         Set<Long> customerIds = orders.collect { it.customer?.id }.findAll().toSet()
 
-        // 🔥 Pitfall: Cross-domain service call inside domain logic
+        // 🔥 Pitfall: Cross-domain service call inside domain logic creates tight coupling between domains
         List<Customer> customers = customerService.getCustomersByIds(customerIds as List)
-
-        // 🔥 Pitfall: Building a map in memory (vs. optimized query or join)
         Map<Long, Customer> customerMap = customers.collectEntries { [(it.id): it] }
 
         return orders.collect { order ->
