@@ -6,13 +6,15 @@ import org.springframework.stereotype.Service
 class OrderService {
     CustomerService customerService
 
-    Map<String, String> getOrderDetails(Long orderId) {
+    Order getOrderDetails(Long orderId) {
         // 🔥 Pitfall: Direct database access – no repository/DAO abstraction
         Order order = Order.get(orderId)
         if (!order) {
             throw new RuntimeException("Order not found")
         }
-        return getOrderMap(order, order.customer)
+        // 🔥 Pitfall: Exposes domain model directly — violates encapsulation and leaks internal structure
+        // Makes downstream services/controllers dependent on Order's internal representation
+        return order
     }
 
     List<Map<String, String>> getOrderReport(List<Long> orderIds) {

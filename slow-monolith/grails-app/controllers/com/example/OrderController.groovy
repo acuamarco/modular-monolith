@@ -11,7 +11,7 @@ class OrderController {
     }
 
     def report() {
-        def result = orderService.getOrderReport()
+        def result = orderService.getOrderReport([1L, 2L, 3L, 4L, 5L])
         respond result
     }
 }
