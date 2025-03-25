@@ -84,13 +84,13 @@ assets {
 tasks.withType(GroovyCompile).configureEach {
     doFirst {
         println "Big app: Simulating slow Groovy compile..."
-        //Thread.sleep(10000)
+        Thread.sleep(10000)
     }
 }
 
 tasks.named("bootJar") {
     doFirst {
         println "Big app: Simulating slow bootJar packaging..."
-        //Thread.sleep(5000)
+        Thread.sleep(5000)
     }
 }
