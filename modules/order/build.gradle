@@ -2,10 +2,11 @@ plugins {
     id "groovy" 
     id "war" 
     id "idea" 
-    id "org.grails.grails-plugin" 
-    id "application" 
+    id "org.grails.grails-plugin"
     id "eclipse" 
 }
+
+apply plugin: "org.grails.grails-plugin"
 
 version "0.1"
 group = "order"
@@ -13,6 +14,7 @@ group = "order"
 repositories {
     mavenCentral()
     maven { url "https://repo.grails.org/grails/core/" }
+    gradlePluginPortal()
 }
 
 configurations {
@@ -49,14 +51,18 @@ dependencies {
 
 }
 
-application {
-    mainClass.set("order.Application")
-}
-
 java {
     sourceCompatibility = JavaVersion.toVersion("11")
 }
 
 tasks.withType(Test) {
     useJUnitPlatform()
+}
+
+tasks.named("mergeTestReports") {
+    dependsOn(test)
+}
+
+tasks.named("bootWar") {
+    enabled = false
 }

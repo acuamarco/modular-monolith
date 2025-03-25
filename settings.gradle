@@ -7,7 +7,6 @@ pluginManagement {
     }
     plugins {
         id "org.grails.grails-web" version "6.0.0"
-        id "org.grails.grails-gsp" version "6.0.0"
         id "com.bertramlabs.asset-pipeline" version "4.3.0"
     }
 }
@@ -17,6 +16,8 @@ plugins {
 }
 
 rootProject.name="slow-monolith"
+include 'slow-monolith'
+include 'modules:order'
 
 develocity {
     server = 'https://develocity.example.com:8443/'
